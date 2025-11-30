@@ -1,4 +1,4 @@
-# Vue Vapor Metrics
+# vuevapor.watch
 
 Hi, I'm Frank! 👋
 
@@ -67,7 +67,7 @@ See [`benchmark/artifacts/report.md`](benchmark/artifacts/report.md) for detaile
 ## Repository Structure
 
 ```
-vue-vapor-metrics/
+vuevapor-watch/
 ├── example/              # Vapor example application
 │   ├── src/
 │   │   ├── components/   # HelloWorld.vue - reactive counter

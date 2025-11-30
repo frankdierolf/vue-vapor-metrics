@@ -3,32 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vue-vapor-metrics | Tracking Vue Vapor's path to 10KB</title>
+  <title>vuevapor.watch | Tracking Vue Vapor's path to 10KB</title>
   <meta name="description" content="Track Vue Vapor Mode's bundle size evolution as it progresses toward its ~10KB gzipped target.">
   <meta name="keywords" content="Vue, Vapor Mode, Vue 3.6, bundle size, benchmarks, performance">
   <meta name="author" content="Frank Dierolf">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="vue-vapor-metrics | Tracking Vue Vapor's path to 10KB">
+  <meta property="og:title" content="vuevapor.watch | Tracking Vue Vapor's path to 10KB">
   <meta property="og:description" content="Track Vue Vapor Mode's bundle size evolution as it progresses toward its ~10KB gzipped target.">
   <meta property="og:type" content="website">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="vue-vapor-metrics | Tracking Vue Vapor's path to 10KB">
+  <meta name="twitter:title" content="vuevapor.watch | Tracking Vue Vapor's path to 10KB">
   <meta name="twitter:description" content="Track Vue Vapor Mode's bundle size evolution as it progresses toward its ~10KB gzipped target.">
 
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main data-page="vue-vapor-metrics">
+  <main data-page="vuevapor-watch">
     <div data-component="container">
 
       <!-- Hero -->
       <section data-component="hero">
         <div data-slot="logo">
-          <span data-slot="wordmark">vue-vapor-metrics</span>
+          <span data-slot="wordmark">vuevapor.watch</span>
         </div>
         <div data-slot="hero-copy">
           <h1>Tracking Vue Vapor's path to 10KB</h1>
@@ -36,7 +36,7 @@
         </div>
         <div data-slot="hero-cta">
           <a href="#benchmark" data-slot="cta-primary">View Benchmarks</a>
-          <a href="https://github.com/frankdierolf/vue-vapor-metrics" target="_blank" rel="noopener" data-slot="cta-secondary">GitHub</a>
+          <a href="https://github.com/frankdierolf/vuevapor-watch" target="_blank" rel="noopener" data-slot="cta-secondary">GitHub</a>
         </div>
       </section>
 
@@ -166,8 +166,8 @@
       <section data-component="quickstart">
         <h2>Run It Yourself</h2>
         <pre><code><span data-slot="comment"># Clone the repo</span>
-git clone https://github.com/frankdierolf/vue-vapor-metrics
-cd vue-vapor-metrics
+git clone https://github.com/frankdierolf/vuevapor-watch
+cd vuevapor-watch
 
 <span data-slot="comment"># Install dependencies</span>
 npm install
@@ -182,10 +182,10 @@ npm run <span data-slot="highlight">benchmark:inspect</span></code></pre>
       <!-- Footer -->
       <footer data-component="footer">
         <div data-slot="cell">
-          <a href="https://github.com/frankdierolf/vue-vapor-metrics" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/frankdierolf/vuevapor-watch" target="_blank" rel="noopener">GitHub</a>
         </div>
         <div data-slot="cell">
-          <a href="https://github.com/frankdierolf/vue-vapor-metrics/issues" target="_blank" rel="noopener">Issues</a>
+          <a href="https://github.com/frankdierolf/vuevapor-watch/issues" target="_blank" rel="noopener">Issues</a>
         </div>
         <div data-slot="cell">
           <span>MIT License</span>
@@ -214,7 +214,7 @@ npm run <span data-slot="highlight">benchmark:inspect</span></code></pre>
 
     async function loadBenchmarks() {
       try {
-        const response = await fetch('https://raw.githubusercontent.com/frankdierolf/vue-vapor-metrics/main/benchmark/results/build-history.json');
+        const response = await fetch('https://raw.githubusercontent.com/frankdierolf/vuevapor-watch/main/benchmark/results/build-history.json');
         const data = await response.json();
         const benchmarks = data.benchmarks;
 
