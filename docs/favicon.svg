@@ -1,3 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <path stroke="#42b883" stroke-width="4" d="M6 6L26 26M26 6L6 26" transform="rotate(15 16 16)"/>
+  <!-- Black Outline Layer (Background) -->
+  <!-- V shape -->
+  <path d="M6 8 L16 24 L26 8" fill="none" stroke="black" stroke-width="6" stroke-linejoin="miter" stroke-linecap="butt"/>
+  <!-- Small vapor wisp (moved down slightly, made wider) -->
+  <path d="M10 26.5 Q16 24.5, 22 26.5" fill="none" stroke="black" stroke-width="4" stroke-linecap="butt"/>
+  
+  <!-- White Fill Layer (Foreground) -->
+  <!-- V shape -->
+  <path d="M6 8 L16 24 L26 8" fill="none" stroke="white" stroke-width="4" stroke-linejoin="miter" stroke-linecap="butt"/>
+  <!-- Small vapor wisp -->
+  <path d="M10 26.5 Q16 24.5, 22 26.5" fill="none" stroke="white" stroke-width="2" stroke-linecap="butt"/>
 </svg>
