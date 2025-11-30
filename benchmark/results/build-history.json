@@ -1,0 +1,21 @@
+{
+  "benchmarks": [
+    {
+      "timestamp": "2025-11-30T09:49:07.356Z",
+      "mode": "benchmark",
+      "vapor": {
+        "raw": 60143,
+        "gzipped": 22213
+      },
+      "classic": {
+        "raw": 66935,
+        "gzipped": 26367
+      },
+      "delta": {
+        "raw": -6792,
+        "gzipped": -4154
+      },
+      "vueVersion": "3.6.0-alpha.5"
+    }
+  ]
+}

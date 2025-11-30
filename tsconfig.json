@@ -1,0 +1,22 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "types": ["node", "vite/client"],
+    "noUncheckedIndexedAccess": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "vueCompilerOptions": {
+    "target": 3.6
+  },
+  "include": [
+    "example/src/**/*.ts",
+    "example/src/**/*.tsx",
+    "example/src/**/*.vue",
+    "vite.config.ts",
+    "benchmark/scripts/**/*.ts"
+  ]
+}

@@ -1,0 +1,157 @@
+name: Vue 3.6 Release Tracker
+
+on:
+  schedule:
+    # Run daily at 10:00 UTC
+    - cron: '0 10 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-vue-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get current Vue version
+        id: current
+        run: |
+          CURRENT=$(node -p "require('./package.json').dependencies.vue")
+          echo "version=$CURRENT" >> $GITHUB_OUTPUT
+          echo "Current version: $CURRENT"
+
+      - name: Get latest Vue 3.6.x version
+        id: latest
+        run: |
+          LATEST=$(npm view vue@'^3.6.0' version)
+          echo "version=$LATEST" >> $GITHUB_OUTPUT
+          echo "Latest version: $LATEST"
+
+      - name: Check if update needed
+        id: check
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          LATEST="${{ steps.latest.outputs.version }}"
+
+          # Remove ^ or ~ prefixes
+          CURRENT_CLEAN=$(echo "$CURRENT" | sed 's/[\^~]//g')
+
+          if [ "$CURRENT_CLEAN" = "$LATEST" ]; then
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "No update needed"
+          else
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "Update available: $CURRENT_CLEAN -> $LATEST"
+          fi
+
+      - name: Check if PR already exists
+        if: steps.check.outputs.needs_update == 'true'
+        id: pr_exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_COUNT=$(gh pr list --head "update-vue-${{ steps.latest.outputs.version }}" --json number --jq 'length')
+          echo "count=$PR_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        run: npm install
+
+      - name: Create update branch
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "update-vue-${{ steps.latest.outputs.version }}"
+
+      - name: Update package.json
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        run: |
+          npm install vue@${{ steps.latest.outputs.version }}
+
+      - name: Run benchmark
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        id: benchmark
+        run: |
+          npm run benchmark || echo "benchmark_failed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        run: |
+          git add package.json package-lock.json benchmark/results/build-history.json
+          git commit -m "chore: update Vue to ${{ steps.latest.outputs.version }}"
+          git push origin "update-vue-${{ steps.latest.outputs.version }}"
+
+      - name: Read benchmark results
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        id: results
+        run: |
+          # Get latest benchmark entry
+          LATEST_BENCHMARK=$(cat benchmark/results/build-history.json | jq -r '.benchmarks[-1]')
+          VAPOR_GZIP=$(echo "$LATEST_BENCHMARK" | jq -r '.vapor.gzipped')
+          CLASSIC_GZIP=$(echo "$LATEST_BENCHMARK" | jq -r '.classic.gzipped')
+          DELTA_GZIP=$(echo "$LATEST_BENCHMARK" | jq -r '.delta.gzipped')
+
+          VAPOR_KB=$(echo "scale=1; $VAPOR_GZIP / 1024" | bc)
+          CLASSIC_KB=$(echo "scale=1; $CLASSIC_GZIP / 1024" | bc)
+          DELTA_KB=$(echo "scale=1; $DELTA_GZIP / 1024" | bc)
+
+          echo "vapor_kb=$VAPOR_KB" >> $GITHUB_OUTPUT
+          echo "classic_kb=$CLASSIC_KB" >> $GITHUB_OUTPUT
+          echo "delta_kb=$DELTA_KB" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VAPOR_KB="${{ steps.results.outputs.vapor_kb }}"
+          CLASSIC_KB="${{ steps.results.outputs.classic_kb }}"
+          DELTA_KB="${{ steps.results.outputs.delta_kb }}"
+
+          # Determine if Vapor is smaller
+          if (( $(echo "$DELTA_KB < 0" | bc -l) )); then
+            COMPARISON="✅ Vapor is ${DELTA_KB#-} KB smaller"
+          else
+            COMPARISON="⚠️ Vapor is $DELTA_KB KB larger"
+          fi
+
+          gh pr create \
+            --title "Update Vue to ${{ steps.latest.outputs.version }}" \
+            --body "## Vue 3.6 Release Update
+
+          **Version**: \`${{ steps.current.outputs.version }}\` → \`${{ steps.latest.outputs.version }}\`
+
+          **Release Notes**: https://github.com/vuejs/core/releases/tag/v${{ steps.latest.outputs.version }}
+
+          ### Benchmark Results
+
+          | Build | Gzipped Size |
+          |-------|--------------|
+          | Vapor | ${VAPOR_KB} KB |
+          | Classic | ${CLASSIC_KB} KB |
+
+          **Result**: $COMPARISON
+
+          ### What Changed
+
+          - Updated \`vue\` to version \`${{ steps.latest.outputs.version }}\`
+          - Ran benchmarks and updated history
+          - See \`benchmark/results/build-history.json\` for detailed metrics
+
+          ### Recommendation
+
+          Review the benchmark results and merge if the update looks good. This PR was automatically created by the Vue Release Tracker workflow.
+
+          ---
+
+          🤖 Generated by [Vue Release Tracker](.github/workflows/vue-release-tracker.yml)"
