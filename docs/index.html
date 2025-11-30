@@ -214,7 +214,7 @@ npm run <span data-slot="highlight">benchmark:inspect</span></code></pre>
 
     async function loadBenchmarks() {
       try {
-        const response = await fetch('../benchmark/results/build-history.json');
+        const response = await fetch('https://raw.githubusercontent.com/frankdierolf/vue-vapor-metrics/main/benchmark/results/build-history.json');
         const data = await response.json();
         const benchmarks = data.benchmarks;
 
