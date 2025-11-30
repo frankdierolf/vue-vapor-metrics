@@ -64,6 +64,20 @@ npm run benchmark
 
 See [`benchmark/artifacts/report.md`](benchmark/artifacts/report.md) for detailed results.
 
+## Understanding the Data
+
+**Why is the bundle size increasing?**
+
+During the alpha phase, the Vue team is porting more functionality into Vapor mode. Each release adds features, which temporarily increases the bundle size.
+
+**When will it drop?**
+
+Once Vapor is feature-complete, Vapor-only apps can completely drop the Virtual DOM runtime:
+- `@vue/runtime-core` (VDOM logic)
+- `@vue/runtime-dom` (VDOM DOM bindings)
+
+That's when bundle sizes will drop from ~22 KB to the promised ~10 KB target.
+
 ## Repository Structure
 
 ```

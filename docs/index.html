@@ -101,6 +101,13 @@
         </div>
       </section>
 
+      <!-- Understanding the Numbers -->
+      <section data-component="note">
+        <h2>Understanding the Numbers</h2>
+        <p><strong>Why is the bundle growing?</strong> During alpha, the Vue team is porting more functionality into Vapor mode. Each release adds features, which temporarily increases size.</p>
+        <p><strong>When will it drop?</strong> Once Vapor is feature-complete, apps can drop the Virtual DOM runtime entirely (<code>@vue/runtime-core</code>, <code>@vue/runtime-dom</code>). That's when we'll see the jump from ~22 KB down to the ~10 KB target.</p>
+      </section>
+
       <!-- What is This? -->
       <section data-component="features">
         <div data-slot="section-header">
@@ -173,10 +180,10 @@ cd vuevapor-watch
 npm install
 
 <span data-slot="comment"># Run the benchmark</span>
-npm run <span data-slot="highlight">benchmark</span>
+npm run benchmark
 
 <span data-slot="comment"># Or inspect the builds (readable output)</span>
-npm run <span data-slot="highlight">benchmark:inspect</span></code></pre>
+npm run benchmark:inspect</code></pre>
       </section>
 
       <!-- Footer -->

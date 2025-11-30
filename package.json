@@ -9,7 +9,8 @@
     "build:ship": "vue-tsc -b && vite build --mode ship",
     "preview": "vite preview",
     "benchmark": "tsx benchmark/scripts/compare-builds.ts",
-    "benchmark:inspect": "tsx benchmark/scripts/compare-builds.ts --inspect"
+    "benchmark:inspect": "tsx benchmark/scripts/compare-builds.ts --inspect",
+    "benchmark:backfill": "tsx benchmark/scripts/backfill-history.ts"
   },
   "dependencies": {
     "vue": "^3.6.0-alpha.5"

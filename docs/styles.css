@@ -366,6 +366,43 @@ a:hover {
 }
 
 /* ===================
+   NOTE SECTION
+   =================== */
+[data-component="note"] {
+  border-top: 1px solid var(--color-border-weak);
+  padding: var(--vertical-padding) var(--padding);
+  background: var(--color-background-weak);
+}
+
+[data-component="note"] h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-text-strong);
+  margin-bottom: 1rem;
+}
+
+[data-component="note"] p {
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+
+[data-component="note"] p:last-child {
+  margin-bottom: 0;
+}
+
+[data-component="note"] strong {
+  color: var(--color-accent);
+}
+
+[data-component="note"] code {
+  background: var(--color-background);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* ===================
    FEATURES SECTION
    =================== */
 [data-component="features"] {
