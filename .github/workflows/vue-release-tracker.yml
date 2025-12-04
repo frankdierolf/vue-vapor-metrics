@@ -1,5 +1,14 @@
 name: Vue 3.6 Release Tracker
 
+# This workflow creates PRs automatically when new Vue 3.6 releases are detected.
+#
+# REQUIRED REPOSITORY SETTING:
+# Enable "Allow GitHub Actions to create and approve pull requests" in:
+# Repository Settings > Actions > General > Workflow permissions
+#
+# Without this setting, the workflow will fail with:
+# "GitHub Actions is not permitted to create or approve pull requests"
+
 on:
   schedule:
     # Run daily at 10:00 UTC
@@ -63,8 +72,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          PR_COUNT=$(gh pr list --head "update-vue-${{ steps.latest.outputs.version }}" --json number --jq 'length')
+          BRANCH_NAME="update-vue-${{ steps.latest.outputs.version }}"
+          PR_COUNT=$(gh pr list --head "$BRANCH_NAME" --json number --jq 'length')
           echo "count=$PR_COUNT" >> $GITHUB_OUTPUT
+
+          # If no PR exists but branch does, delete the stale branch from a previous failed run
+          if [ "$PR_COUNT" = "0" ]; then
+            if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
+              echo "Deleting stale remote branch: $BRANCH_NAME"
+              git push origin --delete "$BRANCH_NAME" || true
+            fi
+          fi
 
       - name: Install dependencies
         if: steps.check.outputs.needs_update == 'true' && steps.pr_exists.outputs.count == '0'

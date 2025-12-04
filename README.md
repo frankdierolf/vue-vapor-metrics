@@ -190,6 +190,19 @@ The GitHub workflow (`.github/workflows/vue-release-tracker.yml`) runs daily and
 
 This keeps the repository always up to date with the latest Vue Vapor progress!
 
+### Required Repository Settings
+
+For the automated PR creation to work, you must enable the following setting in your GitHub repository:
+
+1. Go to **Settings** > **Actions** > **General**
+2. Scroll down to **Workflow permissions**
+3. Check **"Allow GitHub Actions to create and approve pull requests"**
+
+Without this setting, the workflow will fail with:
+```
+GitHub Actions is not permitted to create or approve pull requests
+```
+
 ## Watch the Progress
 
 Want to follow Vue Vapor's journey? Check out:
